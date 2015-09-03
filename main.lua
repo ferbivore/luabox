@@ -10,18 +10,15 @@ tb_print("Hello world!", 0, 0)
 tb_present()
 
 local exit = false
-while not exit do
-	channel.select({
-		"|<-", luabox_events, function(ok, value)
-			if not ok then
-				tb_close()
-				print("Event channel closed.")
-				exit = true
-			else
-				tb_close()
-				print("Event received: ", value)
-				exit = true
-			end
-		end
-	})
-end
+while not exit do channel.select(
+{"|<-", luabox_events, function(ok, value)
+	if not ok then
+		tb_close()
+		print("Event channel closed.")
+		exit = true
+	else
+		tb_close()
+		print("Event channel closed.")
+		exit = true
+	end
+end }) end
