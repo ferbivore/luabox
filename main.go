@@ -116,9 +116,6 @@ func listener(events chan lua.LValue) {
 
 
 func main() {
-    L := lua.NewState()
-    defer L.Close()
-
     events := make(chan lua.LValue)
     quit   := make(chan bool)
     go listener(events)
