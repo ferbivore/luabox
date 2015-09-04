@@ -128,7 +128,7 @@ func termbox_module(L *lua.LState) int {
 
 var termbox_exports = map[string]lua.LGFunction{
     "clear":      termbox_clear,
-    "close":      termbox_close,
+    "close":      termbox_close_lua,
     "flush":      termbox_flush,
     "set":        termbox_set,
     "cursor":     termbox_cursor,
@@ -151,9 +151,14 @@ func termbox_clear(L *lua.LState) int {
 }
 
 /* close() - close termbox and restore the terminal state */
-func termbox_close(L *lua.LState) int {
-    termbox.Close()
+func termbox_close_lua(L *lua.LState) int {
+    termbox_close()
     return 0
+}
+func termbox_close() {
+    if termbox.IsInit {
+        termbox.Close()
+    }
 }
 
 /* flush() - sync the backbuffer and terminal */
@@ -239,7 +244,8 @@ func termbox_listener(events chan lua.LValue) {
     t := L.NewTable()
     for {
         e := termbox.PollEvent()
-        L.SetField(t, "type",     lua.LNumber(e.Type))
+        L.SetField(t, "type",    lua.LString("termbox"))
+        L.SetField(t, "tbtype",   lua.LNumber(e.Type))
         L.SetField(t, "modifier", lua.LNumber(e.Mod))
         L.SetField(t, "key",      lua.LNumber(e.Key))
         L.SetField(t, "char",     lua.LString(string(e.Ch)))

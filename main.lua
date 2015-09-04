@@ -1,9 +1,21 @@
 local termbox = require("termbox")
-local luabox  = require("lib/luabox")
 local inspect = require("lib/inspect")
 
-function luabox.onevent(recv)
-    luabox.exit(inspect(recv))
+-- Print a string to termbox, on a single line, starting at x, y.
+function tbprint(x, y, str)
+    str:gsub(".", function(char)
+        termbox.set(x, y, char)
+        x = x + 1
+    end)
+    termbox.flush()
 end
 
-luabox.loop()
+function luabox.load()
+    tbprint(1, 1, "𝒜wesome!")
+end
+
+function luabox.event(e)
+    termbox.close()
+    print(inspect(e))
+    luabox.quit()
+end
