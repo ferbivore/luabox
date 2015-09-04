@@ -23,15 +23,19 @@ func mainloop(luafile string, events chan lua.LValue) {
     // run the given file
     err := L.DoFile(luafile)
     if err != nil {
+        termbox_close()
         panic(err)
     }
 
     // call luabox.load(), panicking if it fails
-    L.CallByParam(lua.P{
+    if err := L.CallByParam(lua.P{
         Fn: L.GetField(L.GetGlobal("luabox"), "load"),
         NRet: 0,
-        Protect: false,
-        })
+        Protect: true,
+    }); err != nil {
+        termbox_close()
+        panic(err)
+    }
 
     // Start the event loop. Quits when receiving {type = "quit"}.
     // luabox.event(e) is allowed to fail, for now.
@@ -48,6 +52,7 @@ func mainloop(luafile string, events chan lua.LValue) {
             Protect: true,
             }, msg)
         if err != nil {
+            termbox_close()
             panic(err)
         }
     }

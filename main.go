@@ -4,6 +4,7 @@ import "github.com/yuin/gopher-lua"
 import "github.com/nsf/termbox-go"
 import "os"
 import "flag"
+import "path"
 
 // This has to be a global - we write to it from a function called from Lua.
 // See loop.go, function qlobal_quit()
@@ -22,9 +23,20 @@ func main() {
     defer termbox_close()
 
     // either open the file given on the command line or main.lua
-    filename := "main.lua"
+    cfilename := "main.lua"
     if flag.Parse(); flag.Arg(0) != "" {
-        filename = flag.Arg(0)
+        cfilename = flag.Arg(0)
+    }
+    
+    // process the filename - if it's in a directory, we'll need to
+    // chdir to it before running L.DoFile (so we can have relative imports)
+    directory := path.Dir(cfilename)
+    filename := path.Base(cfilename)
+    os.Chdir(directory)
+
+    // bare-minimum sanity check
+    if _, err := os.Stat(filename); err != nil {
+        panic(err)
     }
 
     go termbox_listener(events)
