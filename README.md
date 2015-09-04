@@ -6,7 +6,7 @@ $ go build
 $ ./luabox examples/single-event.lua
 ```
 
-You can also `go get https://github.com/ferbivore/luabox` if you like executables in your path. Here's what an extremely simple program, which prints `!` to your terminal and quits when you press a key, looks like:
+You can also `go get -u https://github.com/ferbivore/luabox` if you like executables in your path. Here's what an extremely simple program, which prints `!` to your terminal and quits when you press a key, looks like:
 
 ```lua
 termbox = require("termbox")
