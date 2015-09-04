@@ -1,4 +1,4 @@
-package main
+package luabox
 
 import "github.com/yuin/gopher-lua"
 

@@ -1,8 +1,9 @@
-package main
+package luabox
 
 import "github.com/yuin/gopher-lua"
 import "github.com/nsf/termbox-go"
 import "os"
+import "flag"
 
 // This has to be a global - we write to it from a function called from Lua.
 // See loop.go, function qlobal_quit()
@@ -20,7 +21,13 @@ func main() {
     }
     defer termbox_close()
 
+    // either open the file given on the command line or main.lua
+    filename := "main.lua"
+    if flag.Arg(0) != "" {
+        filename = flag.Arg(0)
+    }
+
     go termbox_listener(events)
-    go mainloop("main.lua", events)
+    go mainloop(filename, events)
     <- quit
 }

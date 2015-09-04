@@ -1,4 +1,4 @@
-package main
+package luabox
 
 import "github.com/yuin/gopher-lua"
 import "github.com/nsf/termbox-go"
