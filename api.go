@@ -239,7 +239,7 @@ func termbox_listener(events chan lua.LValue) {
     t := L.NewTable()
     for {
         e := termbox.PollEvent()
-        L.SetField(t, "type",    lua.LString("termbox"))
+        L.SetField(t, "type",     lua.LString("termbox"))
         L.SetField(t, "tbtype",   lua.LNumber(e.Type))
         L.SetField(t, "modifier", lua.LNumber(e.Mod))
         L.SetField(t, "key",      lua.LNumber(e.Key))
