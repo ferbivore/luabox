@@ -4,13 +4,20 @@ import "github.com/yuin/gopher-lua"
 import "github.com/nsf/termbox-go"
 import "unicode/utf8"
 
-/* This file implements a Lua-accessible API for termbox-go.
+/* Implements a Lua-accessible API for termbox-go.
    Use L.PreloadModule("termbox", termbox_module) to import it. */
-
 func termbox_module(L *lua.LState) int {
-    mod := L.SetFuncs(L.NewTable(), termbox_exports)
-
-    /* Painstakingly exported Termbox definitions. */
+    mod := L.SetFuncs(L.NewTable(), map[string]lua.LGFunction{
+        "clear":      termbox_clear,
+        "close":      termbox_close_lua,
+        "flush":      termbox_flush,
+        "set":        termbox_set,
+        "cursor":     termbox_cursor,
+        "size":       termbox_size,
+        "sync":       termbox_sync,
+        "setinmode":  termbox_setinmode,
+        "setoutmode": termbox_setoutmode,
+    })
 
     color := L.NewTable()
     L.SetField(color, "default", lua.LNumber(termbox.ColorDefault))
@@ -124,18 +131,6 @@ func termbox_module(L *lua.LState) int {
 
     L.Push(mod)
     return 1
-}
-
-var termbox_exports = map[string]lua.LGFunction{
-    "clear":      termbox_clear,
-    "close":      termbox_close_lua,
-    "flush":      termbox_flush,
-    "set":        termbox_set,
-    "cursor":     termbox_cursor,
-    "size":       termbox_size,
-    "sync":       termbox_sync,
-    "setinmode":  termbox_setinmode,
-    "setoutmode": termbox_setoutmode,
 }
 
 /* clear(fg?, bg?) - clear the backbuffer */
