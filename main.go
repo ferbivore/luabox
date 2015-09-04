@@ -1,4 +1,4 @@
-package luabox
+package main
 
 import "github.com/yuin/gopher-lua"
 import "github.com/nsf/termbox-go"
@@ -23,7 +23,7 @@ func main() {
 
     // either open the file given on the command line or main.lua
     filename := "main.lua"
-    if flag.Arg(0) != "" {
+    if flag.Parse(); flag.Arg(0) != "" {
         filename = flag.Arg(0)
     }
 
