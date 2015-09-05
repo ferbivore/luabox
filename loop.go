@@ -10,6 +10,7 @@ func mainloop(luafile string, events chan lua.LValue) {
 
     /* load the termbox interface module (declared in api.go) */
     L.PreloadModule("termbox", termbox_module)
+    L.DoString("termbox = require('termbox')")
 
     /* create the luabox global */
     luabox := L.NewTable()

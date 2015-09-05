@@ -1,6 +1,5 @@
 -- Displays the terminal's size in real time.
 
-termbox = require("termbox")
 function tbprint(x, y, str)
     str:gsub(".", function(char)
         termbox.set(x, y, char)
