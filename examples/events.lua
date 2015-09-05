@@ -4,6 +4,7 @@ inspect = require("lib/inspect")
 write   = require("lib/write")
 
 function luabox.load()
+    termbox.setinmode(termbox.inmode.mouse)
     write.line("Enter any key to see the event.\nQuit with Ctrl-C.")
 end
 
