@@ -5,6 +5,7 @@ write.xdefault = 1
 write.ydefault = 1
 
 function write.line(str, ox, oy)
+    str = str or ""
     x = ox or write.xdefault
     y = oy or write.ydefault
     str:gsub(".", function(char)
