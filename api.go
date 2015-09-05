@@ -46,7 +46,10 @@ func termbox_module(L *lua.LState) int {
     inmode := L.NewTable()
     L.SetField(inmode, "esc",     lua.LNumber(termbox.InputEsc))
     L.SetField(inmode, "alt",     lua.LNumber(termbox.InputAlt))
-    L.SetField(inmode, "mouse",   lua.LNumber(termbox.InputMouse))
+    L.SetField(inmode, "escMouse",
+        lua.LNumber(termbox.InputEsc | termbox.InputMouse))
+    L.SetField(inmode, "altMouse",
+        lua.LNumber(termbox.InputAlt | termbox.InputMouse))
     L.SetField(inmode, "current", lua.LNumber(termbox.InputCurrent))
     L.SetField(mod, "inmode", inmode)
 
