@@ -1,6 +1,7 @@
 package main
 
 import "github.com/yuin/gopher-lua"
+import "flag"
 
 /* Load the file specified by luafile and start an event loop.
  * Runs luabox.load() when starting and luabox.event(e) for each event. */
@@ -15,7 +16,15 @@ func mainloop(luafile string, events chan lua.LValue) {
     /* create the luabox global */
     luabox := L.NewTable()
     L.SetGlobal("luabox", luabox)
+    /* event channel */
     L.SetField(luabox, "events", lua.LChannel(events))
+    /* command-line arguments */
+    args := L.NewTable()
+    for _, arg := range flag.Args() {
+        args.Append(lua.LString(arg))
+    }
+    L.SetField(luabox, "args", args)
+    /* global functions */
     L.SetFuncs(luabox, map[string]lua.LGFunction{
         "quit": global_quit,
     })
