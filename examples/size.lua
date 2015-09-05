@@ -1,19 +1,12 @@
 -- Displays the terminal's size in real time.
 
-function tbprint(x, y, str)
-    str:gsub(".", function(char)
-        termbox.set(x, y, char)
-        x = x + 1
-    end)
-    termbox.flush()
-end
+write = require("lib/write")
 
 function draw()
     termbox.clear()
     size = termbox.size()
-    tbprint(1, 1, "W: " .. tostring(size.width))
-    tbprint(1, 2, "H: " .. tostring(size.height))
-    termbox.flush()
+    write.line("W: " .. tostring(size.width), 1, 1)
+    write.line("H: " .. tostring(size.height), 1, 2)
 end
 
 function luabox.load()

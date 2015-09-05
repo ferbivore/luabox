@@ -1,19 +1,13 @@
 -- Displays a bunch of Unicode text on the screen, then waits for a single
 -- event, closes termbox and prints the event out.
 
-local inspect = require("lib/inspect")
+inspect = require("lib/inspect")
+write   = require("lib/write")
 
 -- Print a string to termbox, on a single line, starting at x, y.
-function tbprint(x, y, str)
-    str:gsub(".", function(char)
-        termbox.set(x, y, char)
-        x = x + 1
-    end)
-    termbox.flush()
-end
 
 function luabox.load()
-    tbprint(1, 1, "𝒜wesome!")
+    write.line("𝒜wesome!")
 end
 
 function luabox.event(e)
