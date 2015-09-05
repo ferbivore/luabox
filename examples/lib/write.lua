@@ -7,17 +7,15 @@ write.ydefault = 1
 function write.line(str, ox, oy)
     x = ox or write.xdefault
     y = oy or write.ydefault
-    -- see gopher-lua issue #47
-    --str:gsub(".", function(char)
-    for i = 1, str:len() do char = str:sub(i,i)
-        if char == '\n' then
+    str:gsub(".", function(char)
+        if char == "\n" then
             y = y + 1
             x = ox or write.xdefault
         else
             termbox.set(x, y, char)
             x = x + 1
         end
-    end--)
+    end)
     termbox.flush()
     write.xdefault = ox or write.xdefault
     write.ydefault = y + 1
