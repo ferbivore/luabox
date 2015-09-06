@@ -41,6 +41,7 @@ func main() {
 
     /* start the goroutines and wait */
     go termbox_listener(events)
+    go timer(events)
     go mainloop(filename, events)
     <- quit
 }

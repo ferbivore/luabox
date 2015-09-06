@@ -2,6 +2,7 @@ package main
 
 import "github.com/yuin/gopher-lua"
 import "flag"
+import "time"
 
 /* Load the file specified by luafile and start an event loop.
  * Runs luabox.load() when starting and luabox.event(e) for each event. */
@@ -66,4 +67,21 @@ func mainloop(luafile string, events chan lua.LValue) {
 func global_quit(L *lua.LState) int {
     quit <- true
     return 0
+}
+
+/* Sends a message every second.
+ * TODO: customizable interval */
+func timer(events chan lua.LValue) {
+    L := lua.NewState()
+    defer L.Close()
+
+    c := 1
+    t := L.NewTable()
+    for {
+        time.Sleep(time.Second)
+        L.SetField(t, "type", lua.LString("time"))
+        L.SetField(t, "tick", lua.LNumber(c))
+        c += 1
+        events <- t
+    }
 }
