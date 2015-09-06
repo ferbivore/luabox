@@ -11,37 +11,37 @@ import "path"
 var quit chan bool
 
 func main() {
-    events := make(chan lua.LValue, 256)
-    quit = make(chan bool)
+	events := make(chan lua.LValue, 256)
+	quit = make(chan bool)
 
-    /* start up termbox
-     * see https://github.com/nsf/termbox-go/issues/80 */
-    os.Setenv("TERM", "xterm")
-    if err := termbox.Init(); err != nil {
-        panic(err)
-    }
-    defer termbox_close()
+	/* start up termbox
+	 * see https://github.com/nsf/termbox-go/issues/80 */
+	os.Setenv("TERM", "xterm")
+	if err := termbox.Init(); err != nil {
+		panic(err)
+	}
+	defer termbox_close()
 
-    /* either open the file given on the command line or main.lua */
-    cfilename := "main.lua"
-    if flag.Parse(); flag.Arg(0) != "" {
-        cfilename = flag.Arg(0)
-    }
-    
-    /* process the filename - if it's in a directory, we'll need to
-     * chdir to it before running L.DoFile (so we can have relative imports) */
-    directory := path.Dir(cfilename)
-    filename := path.Base(cfilename)
-    os.Chdir(directory)
+	/* either open the file given on the command line or main.lua */
+	cfilename := "main.lua"
+	if flag.Parse(); flag.Arg(0) != "" {
+		cfilename = flag.Arg(0)
+	}
 
-    /* bare-minimum sanity check */
-    if _, err := os.Stat(filename); err != nil {
-        panic(err)
-    }
+	/* process the filename - if it's in a directory, we'll need to
+	 * chdir to it (so we can have relative imports) */
+	directory := path.Dir(cfilename)
+	filename := path.Base(cfilename)
+	os.Chdir(directory)
 
-    /* start the goroutines and wait */
-    go termbox_listener(events)
-    go timer(events)
-    go mainloop(filename, events)
-    <- quit
+	/* bare-minimum sanity check */
+	if _, err := os.Stat(filename); err != nil {
+		panic(err)
+	}
+
+	/* start the goroutines and wait */
+	go termbox_listener(events)
+	go timer(events)
+	go mainloop(filename, events)
+	<-quit
 }
