@@ -4,14 +4,16 @@ Luabox is a tiny library for writing console apps in Lua. It uses [gopher-lua](h
     $ go build
     $ ./luabox examples/single-event.lua
 
-You can also `go get -u https://github.com/ferbivore/luabox` if you like executables in your path. Here's what an extremely simple program, which prints `!` to your terminal and quits when you press a key, looks like:
+You can also `go get -u https://github.com/ferbivore/luabox` if you like executables in your path. Here's what an extremely simple program, which prints `!` to your terminal and quits when you press Ctrl-C, looks like:
 
 ```lua
 function luabox.load()
     termbox.set(1, 1, "!")
 end
 function luabox.event(e)
-    luabox.quit()
+    if e.key == termbox.key.CtrlC then
+        luabox.quit()
+    end
 end
 ```
 
