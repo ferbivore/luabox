@@ -6,6 +6,7 @@ import "os"
 import "flag"
 import "path"
 import "log"
+import "strings"
 
 /* This has to be a global - we write to it from a function called from Lua.
  * See loop.go, function qlobal_quit() */
@@ -20,6 +21,8 @@ func main() {
 	if flag.Parse(); flag.Arg(0) != "" {
 		cfilename = flag.Arg(0)
 	}
+	/* find any backslash separators and turn them into forward slashes */
+	cfilename = strings.Replace(cfilename, "\\", "/", -1)
 
 	/* process the filename - if it's in a directory, we'll need to
 	 * chdir to it (so we can have relative imports) */
