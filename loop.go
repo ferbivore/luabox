@@ -3,6 +3,7 @@ package main
 import "github.com/yuin/gopher-lua"
 import "flag"
 import "time"
+import "log"
 
 /* Load the file specified by luafile and start an event loop.
  * Runs luabox.load() when starting and luabox.event(e) for each event. */
@@ -34,7 +35,7 @@ func mainloop(luafile string, events chan lua.LValue) {
 	err := L.DoFile(luafile)
 	if err != nil {
 		termbox_close()
-		panic(err)
+		log.Fatal(err)
 	}
 
 	/* call luabox.load(), panicking if it fails */
@@ -44,7 +45,7 @@ func mainloop(luafile string, events chan lua.LValue) {
 		Protect: true,
 	}); err != nil {
 		termbox_close()
-		panic(err)
+		log.Fatal(err)
 	}
 
 	/* start the event loop */
@@ -57,7 +58,7 @@ func mainloop(luafile string, events chan lua.LValue) {
 		}, msg)
 		if err != nil {
 			termbox_close()
-			panic(err)
+			log.Fatal(err)
 		}
 	}
 }

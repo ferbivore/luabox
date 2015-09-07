@@ -5,6 +5,7 @@ import "github.com/nsf/termbox-go"
 import "os"
 import "flag"
 import "path"
+import "log"
 
 /* This has to be a global - we write to it from a function called from Lua.
  * See loop.go, function qlobal_quit() */
@@ -13,14 +14,6 @@ var quit chan bool
 func main() {
 	events := make(chan lua.LValue, 256)
 	quit = make(chan bool)
-
-	/* start up termbox
-	 * see https://github.com/nsf/termbox-go/issues/80 */
-	os.Setenv("TERM", "xterm")
-	if err := termbox.Init(); err != nil {
-		panic(err)
-	}
-	defer termbox_close()
 
 	/* either open the file given on the command line or main.lua */
 	cfilename := "main.lua"
@@ -36,8 +29,16 @@ func main() {
 
 	/* bare-minimum sanity check */
 	if _, err := os.Stat(filename); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
+
+	/* start up termbox
+	 * see https://github.com/nsf/termbox-go/issues/80 */
+	os.Setenv("TERM", "xterm")
+	if err := termbox.Init(); err != nil {
+		log.Fatal(err)
+	}
+	defer termbox_close()
 
 	/* start the goroutines and wait */
 	go termbox_listener(events)
