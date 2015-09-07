@@ -16,7 +16,8 @@ end
 function luabox.event(e)
     if e.tbtype == termbox.event.resize then
         draw()
-    else
+    end
+    if e.key == termbox.key.CtrlC then
         luabox.quit()
     end
 end

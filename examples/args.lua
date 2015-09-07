@@ -7,5 +7,7 @@ function luabox.load()
 end
 
 function luabox.event(e)
-    luabox.quit()
+    if e.key == termbox.key.CtrlC then
+        luabox.quit()
+    end
 end
